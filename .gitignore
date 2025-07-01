@@ -1,0 +1,15 @@
+HELP.md
+target/
+/src/main/resources/application-secrets.properties
+/src/main/resources/serviceAccountKey.json
+/src/main/resources/test-2ea39-firebase-adminsdk.json
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
