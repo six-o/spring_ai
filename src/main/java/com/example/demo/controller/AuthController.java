@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:3000", // 允許的來源
+		allowCredentials = "true" // 是否允許攜帶憑證（cookie）
+)
 public class AuthController {
 
 	@Autowired
@@ -51,8 +55,16 @@ public class AuthController {
 			} else {
 				System.out.println("🔄 更新已存在使用者：" + dto.getUid());
 			}
-			userEntity.setName(dto.getName());
-			userEntity.setHead(dto.getPictureUrl());
+
+			String name = dto.getName();
+			if (name == null || name.trim().isEmpty()) {
+				name = dto.getEmail(); // 或 "Firebase使用者"
+			}
+
+			userEntity.setName(name);
+			if (dto.getPictureUrl() != null) {
+				userEntity.setHead(dto.getPictureUrl());
+			}
 			userEntity.setEmail(dto.getEmail());
 
 			userRepository.save(userEntity); // ← 寫入或更新
